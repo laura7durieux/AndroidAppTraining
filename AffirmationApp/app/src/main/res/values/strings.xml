@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">AffirmationApp</string>
+    <string name="affirmation1">I can make a difference</string>
+    <string name="affirmation2">I can create anything I visualize</string>
+    <string name="affirmation3">I do</string>
+    <string name="affirmation4">I commit to positive changes now</string>
+    <string name="affirmation5">Appreciate your day</string>
+    <string name="affirmation6">I focus on making the most of the time I have</string>
+    <string name="affirmation7">I feel glorious</string>
+    <string name="affirmation8">I am bold and courageous</string>
+    <string name="affirmation9">Good thinks are going to happen</string>
+    <string name="affirmation10">I am</string>
+</resources>
