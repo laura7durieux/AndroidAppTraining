@@ -91,7 +91,7 @@ private val DarkColors = darkColorScheme(
 @Composable
 fun WoofTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable() () -> Unit
 ) {
     val colors = if (!useDarkTheme) {
@@ -102,6 +102,8 @@ fun WoofTheme(
 
     MaterialTheme(
         colorScheme = colors,
-        content = content
+        content = content,
+        typography = Typography,
+        shapes = Shapes,
     )
 }
