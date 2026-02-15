@@ -1,0 +1,3 @@
+﻿D:\Documents\My_GitHub\AndroidAppTraining\LogTrack_1_1\build.gradle.kts
+D:\Documents\My_GitHub\AndroidAppTraining\LogTrack_1_1\settings.gradle.kts
+D:\Documents\My_GitHub\AndroidAppTraining\LogTrack_1_1\app\build.gradle.kts

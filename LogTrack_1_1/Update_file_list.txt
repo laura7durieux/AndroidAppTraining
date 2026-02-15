@@ -1,0 +1,17 @@
+TO USE IN THE POWERSHELL
+
+cd D:\Documents\My_GitHub\AndroidAppTraining\LogTrack_1_1\app
+
+tree /f src\main\java > FILE_TREE.txt
+tree /f src\main\res  >> FILE_TREE.txt
+
+Get-ChildItem -Recurse -Filter *.gradle.kts | Select-Object -ExpandProperty FullName |
+  Out-File GRADLE_FILES.txt -Encoding UTF8
+
+Get-ChildItem -Recurse src\main\java -Filter *.kt |
+  ForEach-Object {
+    "`n==== $($_.FullName) ====";
+    (Get-Content $_.FullName) |
+      Select-String -Pattern '^(package |import |class |interface |object |data class |sealed class |enum class |@Composable|fun )' |
+      ForEach-Object { $_.Line }
+  } | Out-File API_INDEX.txt -Encoding UTF8

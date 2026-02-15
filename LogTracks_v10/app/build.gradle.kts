@@ -1,7 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("org.jetbrains.kotlin.kapt")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -70,7 +70,7 @@ dependencies {
     // Room (compatible compileSdk 33)
     implementation("androidx.room:room-runtime:2.5.2")
     implementation("androidx.room:room-ktx:2.5.2")
-    kapt("androidx.room:room-compiler:2.5.2")
+    ksp("androidx.room:room-compiler:2.5.2")
     // Navigation Compose (compatible compileSdk 33)
     implementation("androidx.navigation:navigation-compose:2.6.0")
     // ViewModel Compose (OK avec Kotlin 1.8.x)
