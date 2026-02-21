@@ -3,23 +3,22 @@ package com.example.logtrack_1_1
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.BarChart
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Today
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.logtrack_1_1.di.DefaultAppContainer
+import com.example.logtrack_1_1.di.LocalAppContainer
 import com.example.logtrack_1_1.ui.nav.AppNav
 import com.example.logtrack_1_1.ui.nav.Route
 import com.example.logtrack_1_1.ui.theme.LogTrack_1_1Theme
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Today
-import androidx.compose.material.icons.filled.BarChart
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.runtime.CompositionLocalProvider
-import com.example.logtrack_1_1.di.DefaultAppContainer
-import com.example.logtrack_1_1.di.LocalAppContainer
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,6 +46,7 @@ private fun AppRoot() {
         val currentRoute = backStackEntry?.destination?.route
 
         val tabs = remember {
+            // ✅ AddEvent n’est pas un tab : on le laisse hors de la bottom bar
             listOf(Route.Today, Route.Insights, Route.Settings)
         }
 
@@ -59,6 +59,7 @@ private fun AppRoot() {
                                 Route.Today.path -> "Today"
                                 Route.Insights.path -> "Insights"
                                 Route.Settings.path -> "Settings"
+                                Route.AddEvent.path -> "Add Event" // ✅ NEW
                                 else -> "LogTrack"
                             }
                         )
@@ -89,6 +90,7 @@ private fun AppRoot() {
                                         Route.Today -> "Today"
                                         Route.Insights -> "Insights"
                                         Route.Settings -> "Settings"
+                                        else -> "" // ✅ évite l’erreur exhaustive si d’autres routes existent
                                     }
                                 )
                             },
@@ -97,6 +99,7 @@ private fun AppRoot() {
                                     Route.Today -> Icon(Icons.Default.Today, contentDescription = null)
                                     Route.Insights -> Icon(Icons.Default.BarChart, contentDescription = null)
                                     Route.Settings -> Icon(Icons.Default.Settings, contentDescription = null)
+                                    else -> {} // ✅ idem
                                 }
                             },
                             colors = NavigationBarItemDefaults.colors(

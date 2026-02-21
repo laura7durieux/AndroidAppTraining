@@ -23,10 +23,14 @@ fun AddEventSheet(
     val value = valueText.replace(',', '.').toDoubleOrNull()
 
     ModalBottomSheet(
-        onDismissRequest = onDismiss
+        onDismissRequest = onDismiss,
+        // windowInsets = WindowInsets(0) // ✅ pas de réaction au clavier
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .navigationBarsPadding(),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text("Add event — ${metric.name}", style = MaterialTheme.typography.titleLarge)
@@ -57,13 +61,9 @@ fun AddEventSheet(
                 Spacer(Modifier.width(8.dp))
                 Button(
                     enabled = value != null,
-                    onClick = {
-                        onConfirm(value!!, note)
-                    }
+                    onClick = { onConfirm(value!!, note) }
                 ) { Text("Add") }
             }
-
-            Spacer(Modifier.height(16.dp))
         }
     }
 }

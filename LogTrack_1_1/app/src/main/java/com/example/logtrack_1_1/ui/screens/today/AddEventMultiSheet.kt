@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import com.example.logtrack_1_1.data.entity.CategoryEntity
 import com.example.logtrack_1_1.data.entity.EventImpactEntity
 import com.example.logtrack_1_1.data.entity.MetricEntity
+import androidx.compose.foundation.layout.WindowInsets
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,7 +26,6 @@ fun AddEventMultiSheet(
     var title by remember { mutableStateOf("") }
     var note by remember { mutableStateOf("") }
 
-    // 1 event -> 1 category (null = Uncategorized)
     var selectedCategoryId by remember { mutableStateOf<Long?>(null) }
     var catExpanded by remember { mutableStateOf(false) }
 
@@ -37,9 +37,7 @@ fun AddEventMultiSheet(
         metrics.filter { it.categoryId == selectedCategoryId }
     }
 
-    // metricId -> enabled
     val enabledMap = remember(selectedCategoryId, metricsForCategory) { mutableStateMapOf<Long, Boolean>() }
-    // metricId -> valueText
     val valueMap = remember(selectedCategoryId, metricsForCategory) { mutableStateMapOf<Long, String>() }
 
     LaunchedEffect(metricsForCategory) {
@@ -50,17 +48,19 @@ fun AddEventMultiSheet(
     }
 
     val hasAtLeastOneImpact = enabledMap.values.any { it }
-
-    // ✅ keep scroll position stable across IME/layout changes
     val listState = rememberLazyListState()
 
-    ModalBottomSheet(onDismissRequest = onDismiss) {
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        // ✅ sheet "statique" : ne suit pas le clavier (IME)
+        // windowInsets = WindowInsets(0, 0, 0, 0)
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight(0.92f)
-                .imePadding() // ✅ push content above keyboard
-                .padding(16.dp),
+                .padding(16.dp)
+                .navigationBarsPadding(), // ✅ protège le footer de la navbar
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Text("Add Event", style = MaterialTheme.typography.titleLarge)
@@ -80,7 +80,6 @@ fun AddEventMultiSheet(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            // Category dropdown
             ExposedDropdownMenuBox(
                 expanded = catExpanded,
                 onExpandedChange = { catExpanded = !catExpanded }
@@ -123,9 +122,10 @@ fun AddEventMultiSheet(
                 Spacer(Modifier.weight(1f))
             } else {
                 LazyColumn(
-                    state = listState, // ✅ preserve scroll position
+                    state = listState,
                     modifier = Modifier.weight(1f),
-                    contentPadding = PaddingValues(bottom = 140.dp), // ✅ keep last fields above footer/IME
+                    // ✅ laisse de la place pour le footer (et le clavier overlay)
+                    contentPadding = PaddingValues(bottom = 140.dp),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     items(metricsForCategory, key = { it.id }) { m ->
@@ -165,7 +165,6 @@ fun AddEventMultiSheet(
                 }
             }
 
-            // Sticky footer
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End

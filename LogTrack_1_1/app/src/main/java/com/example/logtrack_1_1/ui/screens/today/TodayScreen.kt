@@ -16,7 +16,9 @@ import com.example.logtrack_1_1.ui.vm.TrackerViewModelFactory
 import kotlin.math.abs
 
 @Composable
-fun TodayScreen() {
+fun TodayScreen(
+    onOpenAddEvent: () -> Unit
+) {
     val container = LocalAppContainer.current
     val vm: TrackerViewModel = viewModel(factory = TrackerViewModelFactory(container.repository))
 
@@ -28,12 +30,10 @@ fun TodayScreen() {
         todayValues.associateBy({ it.metricId }, { it.value })
     }
 
-    var showAddEvent by remember { mutableStateOf(false) }
-
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { showAddEvent = true },
+                onClick = onOpenAddEvent,
                 containerColor = MaterialTheme.colorScheme.primary
             ) { Text("+") }
         }
@@ -67,7 +67,6 @@ fun TodayScreen() {
                     val title =
                         if (catId == null) "Uncategorized" else (catNameById[catId] ?: "Category")
 
-                    // ✅ On ne garde que les metrics impactées aujourd’hui
                     val visibleMetrics = grouped[catId].orEmpty().filter { m ->
                         val raw = valueByMetricId[m.id]
                         raw != null && raw != 0.0
@@ -118,18 +117,6 @@ fun TodayScreen() {
                 }
             }
         }
-    }
-
-    if (showAddEvent) {
-        AddEventMultiSheet(
-            categories = categories,
-            metrics = metrics,
-            onDismiss = { showAddEvent = false },
-            onConfirm = { title, note, impacts ->
-                vm.addEventMulti(title, note, impacts)
-                showAddEvent = false
-            }
-        )
     }
 }
 
